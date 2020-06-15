@@ -14,12 +14,7 @@ nav{
   margin-right: -130px;
 }
 label.logo{
-  color: #17ada1;
-  font-size: 22px;
-  line-height: 80px;
   padding: 0 40px;
-  font-weight: 250;
-  font-family: 'Poppins', sans-serif;
 }
 nav ul{
   float: right;
@@ -94,15 +89,4 @@ a.active,a:hover{
   #check:checked ~ ul{
     left: 0;
   }
-}
-body{
-  background: url('/images/theme.png') no-repeat;
-  background-size: cover;
-  height: calc(100vh - 80px);
-  
-}
-
-div {
-    display: flex;
-    justify-content: ce;
 }

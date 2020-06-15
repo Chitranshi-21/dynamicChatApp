@@ -153,6 +153,12 @@ contactQueryError) => {
                                          });
                                     response.cookie('jwt',token, { httpOnly: false, secure: false, maxAge: 5600000 });
                                     response.header('auth-token', token).render('dashboard.ejs',{objUser}); 
+                                    
+                                    //dashboard
+                                  router.get('/dash', function(req, res) {
+                                   res.render('dashboard.ejs',{objUser});
+                                  })
+
   
                                     //Contact Info Page
 
@@ -160,7 +166,7 @@ contactQueryError) => {
                                       {
                                         await
                                         pool
-                                        .query('SELECT sfid, name, Email, Phone, Title FROM salesforce.Contact WHERE email = $1 ',[email])
+                                        .query('SELECT sfid, name,firstName, Email, Phone, Title FROM salesforce.Contact WHERE email = $1 ',[email])
                                         .then((contactQueryResult) => {
                                         console.log('contactQueryResult.rows[0]  '+JSON.stringify(contactQueryResult.rows[0]));
                                             if(contactQueryResult.rowCount > 0 )
@@ -273,13 +279,26 @@ contactQueryError) => {
                                     errors.push({msg: 'You are not registered'});
                                     response.render('login',{errors});
                                    }
-                       }})
+
+                       }
+                       else if(loginResult.rowCount == 0)
+                       {
+                         console.log('inside else');
+                         errors.push({msg: 'You are not registered'});
+                         response.render('login',{errors});
+                       }
+                       })
         .catch((loginError) =>{
          console.log('loginError   :  '+loginError.stack);
           isUserExist = false;
           });
   
         });
+
+      //logout
+      router.get('/logout',(req,res) => {
+        res.render('login.ejs');
+      })
 
     //chatter
 
@@ -314,35 +333,34 @@ router.get('/forgotpassword',(req,res)=>{
 })
 
 
-router.post('/EmailVerification',(request,response)=>{
-  const {emailPass }= request.body;
-  let errors =[];
-  console.log('emailAddress' +emailPass);
-  let queryContact = 'SELECT sfid,email,name FROM salesforce.contact where email=$1' ;
-  console.log('querry Contact '+queryContact);
-  pool
-  .query(queryContact,[emailPass])
-  .then((querryResult)=>{
-        console.log('queryResult: '+JSON.stringify(querryResult.rows));
-        if(querryResult.rowCount==1)
-        {
-          response.send(querryResult.rows);
-        }
-        if(querryResult.rowCount == 0)
-        {
-          errors.push({ msg: 'This email does not exists'});
-          response.render('register',{errors}); 
-        }
-        else
-        {
-          response.send('This Email does not exist');
-        }
-  })
-  .catch((QueryError)=>{
-    console.log('Erros '+ QueryError.stack);
-    response.send('QueryError');
-  })
-})
+  router.post('/EmailVerification',(request,response)=>
+  {
+        const {emailPass }= request.body;
+        let errors =[];
+        console.log('emailAddress' +emailPass);
+        let queryContact = 'SELECT sfid,email,name FROM salesforce.contact where email=$1' ;
+        console.log('querry Contact '+queryContact);
+           pool
+          .query(queryContact,[emailPass])
+          .then((querryResult)=>
+             {
+              console.log('queryResult: '+JSON.stringify(querryResult.rows));
+              if(querryResult.rowCount==1)
+                   {
+                      response.send(querryResult.rows);
+                   }
+               else if(querryResult.rowCount==0)
+                  {
+                      console.log('inside else');
+                      errors.push({msg: 'You are not registered'});
+                      response.render('forgotPassword',{errors}); 
+                   }
+              })
+           .catch((QueryError)=>{
+              console.log('Erros '+ QueryError.stack);
+              response.send('QueryError');
+                               })
+              })
 
 
 //sendEmail
@@ -438,10 +456,6 @@ router.post('/send',(request, response) => {
 
 
 
-//dashboard
-router.get('/dash', function(req, res) {
-  res.render('dashboard.ejs');
-})
 //Register Page
 router.get('/register', function(req, res) {
   res.render('register.ejs');
@@ -578,11 +592,11 @@ router.post('/uploadImage',upload.any(),async (request, response) => {
  }
 });
 
-
 router.get('/chatApp',verify,(request, response)=>{
   let objUser = request.user;
-  response.render('chatNew',{name: objUser.name});
-})
+  console.log('objUser : '+JSON.stringify(objUser));
+  response.render('chatNew',{name: objUser.firstname});
+  })
   
 
 module.exports = router;

@@ -6,6 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="/stylesheet/nav.css">
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<style>
+  body{
+  background: url('/images/theme.png') no-repeat;
+  background-size: cover;
+  height: calc(100vh - 80px);
+  
+}
+div {
+    display: flex;
+    justify-content: ce;
+}
+</style>
 </head>
 <body>
   <nav>
@@ -13,14 +25,15 @@
     <label for="check" class="checkbtn">
       <i class="fas fa-bars"></i>
     </label>
-    <label class="logo">Dashboard</label>
+    <label class="logo"><img src="/images/kloudracLogo.png"></img><img></label>
     
 <ul>
   <li><a class="active" href="#home">Home</a></li>
   <li><a href="/users/chatApp">Chat</a></li>
-  <li><a href="/users/chatter2">Chatter</a></li>
   <li><a href="/users/ContactInfo">Update Profile</a></li>
-  <li><a href="#about"><%= objUser.name %></a></li>
+  <li><a href="#about">Welcome <%= objUser.firstname %> !</a></li>
+  <li><a href="/users/logout"> Logout </a></li>
+   <!--<li><a href="/users/chatter2">Chatter</a></li>--> 
 </ul>
 </nav>
 <section></section>
