@@ -7,7 +7,7 @@ module.exports = (request, response, next) => {
     if(!token){
         request.flash('error_msg', 'Please log in to view that resource');
         response.redirect('/users/login');
-        //return response.status(401).send('Access Denied');
+        return response.status(401).send('Access Denied');
     }
     try
     {

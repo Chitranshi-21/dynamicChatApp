@@ -37,6 +37,18 @@ app.use(express.static(__dirname + '/public'))
 }) */
 
 
+// Express session
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+  })
+);
+
+// Connect flash
+app.use(flash());
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 const PORT = process.env.PORT || 8000
@@ -61,20 +73,6 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('typing', msg);
   })
 })
-
-
-
-// Express session
-app.use(
-  session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
-  })
-);
-
-// Connect flash
-app.use(flash());
 
 
 // Global variables
