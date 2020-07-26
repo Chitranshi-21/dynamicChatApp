@@ -166,7 +166,7 @@ contactQueryError) => {
                                       {
                                         await
                                         pool
-                                        .query('SELECT sfid, name,firstName, Email, Phone, Title FROM salesforce.Contact WHERE email = $1 ',[email])
+                                        .query('SELECT sfid, name,firstName,0000000 Email, Phone, Title FROM salesforce.Contact WHERE email = $1 ',[email])
                                         .then((contactQueryResult) => {
                                         console.log('contactQueryResult.rows[0]  '+JSON.stringify(contactQueryResult.rows[0]));
                                             if(contactQueryResult.rowCount > 0 )
